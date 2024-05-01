@@ -1,5 +1,5 @@
 const {ObjectId} = require('mongoose').Types;
-const { Thought, User } = require('../models');
+const { Thought, User, reactionSchema} = require('../models');
 
 
 module.exports = {
@@ -92,13 +92,13 @@ module.exports = {
         }
     },
 
-    //To create a reaction
+    //To create a reaction // Does not work for reaction body
    async createReaction(req, res) {
     try{
         console.log('start');
         const addReaction = await Thought.findOneAndUpdate(
             {_id: req.params.thoughtId},
-            { $addToSet: {reactions: req.body}},
+            { $addToSet: { reactions: req.body} },
             {runValidators: true, new: true}
         )
 
@@ -113,8 +113,25 @@ module.exports = {
         console.log(error);
         res.status(500).json({message: 'Unable to create Reaction internal error'})
     }
-   } 
+   },
     
+   async deleteReaction(req, res) {
+    try{
+        const deleteReaction = await Thought.findOneAndRemove(
+            {_id: req.params.thoughtId},
+            {$pull: {reactions:{reactionId: req.params.reactionId}}},
+            {runValidators: true, new: true}
+        );
+
+        if(!deleteReaction) {
+            res.status(400).json({ message: 'Unable to find reaction data user'})
+        }
+        console.log('end')
+    }catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Unable to delete Reaction internal error'})
+    }
+   }
 
 };
 
