@@ -4,7 +4,7 @@ const { Thought, User, reactionSchema } = require('../models');
 
 module.exports = {
 
-    //det alll thought users
+    //get all thought users
     //Route works
     async getThought(req, res) {
         try{
@@ -18,6 +18,7 @@ module.exports = {
         }
     },
 
+    //Not working
     async getSingleThought(req, res) {
         try{
             console.log('start')
@@ -36,6 +37,27 @@ module.exports = {
             console.log(err);
         }
     },
+
+    async createThought(req, res) {
+        try{
+            console.log('start')
+              const thought = await Thought.create(req.body);
+              const user = await User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $push: { thoughts: thought._id} },
+                { runValidators: true, new: true }
+              );
+              if(!user) {
+                return res.status(404).json({message: 'Unable to find user with that id'})
+              };
+              res.json('Created thought');
+              console.log('end')
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: 'Failed create Thought'})
+        }
+    }
+
 
 
 };
