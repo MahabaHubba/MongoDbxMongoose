@@ -58,6 +58,7 @@ module.exports = {
         }
     },
 
+// Updating Thought works
     async updateThought(req, res) {
         try{
             console.log('start');
@@ -67,7 +68,7 @@ module.exports = {
                 {runValidators: true, new: true}
             );
             if(!updateThought){
-                res.status(404).json({ message: 'No Thought to update'})
+                res.status(404).json({ message: 'No Thought id to update'})
             };
             res.json(updateThought);
 
@@ -75,9 +76,22 @@ module.exports = {
             console.log(error)
             res.status(500).json({ message: 'Unable to update Thought'})
         }
+    },
+    // Is able to delete
+    async deleteThought(req, res) {
+        try{
+            console.log('start');
+             const deleteThought = await Thought.findOneAndRemove({_id: req.params.thoughtId});
+             if(!deleteThought) {
+                res.status(404).json({ message: 'Unable to find thought to delete'})
+             }
+             console.log('end')
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: '500 error to delete thought'})
+        }
     }
-
-
+    
 
 };
 
