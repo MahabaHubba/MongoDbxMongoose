@@ -18,7 +18,7 @@ module.exports = {
         }
     },
 
-    //Not working
+    //Single thought working
     async getSingleThought(req, res) {
         try{
             console.log('start')
@@ -37,7 +37,7 @@ module.exports = {
             console.log(err);
         }
     },
-
+// Create Thought works (POST)
     async createThought(req, res) {
         try{
             console.log('start')
@@ -55,6 +55,25 @@ module.exports = {
         } catch (error) {
             console.log(error);
             res.status(500).json({message: 'Failed create Thought'})
+        }
+    },
+
+    async updateThought(req, res) {
+        try{
+            console.log('start');
+            const updateThought = await Thought.findOneAndUpdate(
+                {_id: req.params.thoughtId},
+                { $set: req.body}, 
+                {runValidators: true, new: true}
+            );
+            if(!updateThought){
+                res.status(404).json({ message: 'No Thought to update'})
+            };
+            res.json(updateThought);
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: 'Unable to update Thought'})
         }
     }
 
