@@ -1,5 +1,5 @@
 const {ObjectId} = require('mongoose').Types;
-const { Thought, User, reactionSchema } = require('../models');
+const { Thought, User } = require('../models');
 
 
 module.exports = {
@@ -90,7 +90,30 @@ module.exports = {
             console.log(error)
             res.status(500).json({ message: '500 error to delete thought'})
         }
+    },
+
+    //To create a reaction
+   async createReaction(req, res) {
+    try{
+        console.log('start');
+        const addReaction = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            { $addToSet: {reactions: req.body}},
+            {runValidators: true, new: true}
+        )
+
+        if(!addReaction) {
+            return res.status(404).json({ message: "unable to add reaction error 404"})
+        }
+
+        res.json(addReaction);
+
+        console.log('end')
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Unable to create Reaction internal error'})
     }
+   } 
     
 
 };
