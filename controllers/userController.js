@@ -41,7 +41,7 @@ module.exports = {
         }
     },
 
-    //Update a Courese (Unable to update) (1)
+    //Can update but will take time
     async updateUser(req, res) {
         try{
             console.log('start')
@@ -58,6 +58,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
+
     //Is able to delete
 
     async deleteUser(req, res) {
@@ -80,7 +81,7 @@ module.exports = {
         }
     },
 
-    //UNable to add friend (2)
+    //Able to add friend
     async addFriend(req, res) {
         console.log('You are adding a friend')
         console.log(req.body);
@@ -107,7 +108,7 @@ module.exports = {
             console.log('start')
             const friend = await User.findOneAndUpdate(
                 {_id: req.params.userId},
-                { $pull: { friends: { friendId: req.params.friendId}}},
+                { $pull: { friends: req.params.friendId}},
                 { runValidators: true, new: true}
             );
 
