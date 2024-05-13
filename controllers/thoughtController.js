@@ -92,7 +92,7 @@ module.exports = {
         }
     },
 
-    //To create a reaction // Does not work for reaction body
+    //To create a reaction // Does not work for reaction body// For it to work reactionbody is commented Out
    async createReaction(req, res) {
     try{
         console.log('start');
@@ -115,11 +115,12 @@ module.exports = {
     }
    },
     
+   //Delete Reaction deletes the wholethought
    async deleteReaction(req, res) {
     try{
         const deleteReaction = await Thought.findOneAndRemove(
             {_id: req.params.thoughtId},
-            {$pull: {reactions:{_id: req.params.reactionId}}},
+            {$pull: {reactions: req.params.reactionId}},
             {runValidators: true, new: true}
         );
 

@@ -102,7 +102,7 @@ module.exports = {
         }
     },
 
-    //Unable to remove friend
+    //Able to remove friend
     async removeFriend(req, res) {
         try{
             console.log('start')
